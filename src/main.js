@@ -32,14 +32,12 @@
       // assigns the keys to a variable when an object is reached
       var tag = input.tag
         , content = input.content;
-      // checks if content variable has further nested objects/arrays, maps over (recursive) if so  
+      // checks if content variable has further nested objects/arrays, maps over (recursive) if so
       if (typeof content === 'string') {
         return '<' + tag + '>' + content + '</' + tag + '>';
       } else {
         return '<' + tag + '>' + recursiveDigging(content) + '</' + tag + '>';
       }
     };
-
   });
-
 }());
