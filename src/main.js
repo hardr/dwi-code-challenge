@@ -1,14 +1,44 @@
 (function() {
   'use strict';
-
+  // sanity check
   console.log('Insanity, check!');
-
+  // event listener watching for a change in the upload input field
   $("#fileUpload").on('change', function(evt) {
-    var file = evt.target.files[0]; // file object
-    console.log(file);
-    var output = '<li>' + file.name + ' - ' + (file.type || 'n/a') + '</li>';
+    // once fired, assigns the upload to a variable
+    var file = evt.target.files[0];
+    // and instantiates a new reader
+    var reader = new FileReader();
+    // native 'onload' method attached to reader waits for upload to complete
+    reader.onload = (function(fileData) {
+      return function(e) {
+        // assigns parsed file to variable
+        var content = JSON.parse(e.target.result);
+        // and assigns returned string of html elements to variable
+        var htmlContent = recursiveDigging(content);
+        // renders above string to dom
+        $("#render").empty().append(htmlContent);
+      }
+    // iife passes upload into onload method for render processing
+    })(file);
+    // sets behavior (what the output format is) for reader.onload
+    reader.readAsText(file);
 
-    document.getElementById('render').innerHTML = '<ul>' + output + '</ul>';
+    // recursive helper function for digging deep takes parsed JSON data object ()
+    function recursiveDigging(input) {
+      // checks if input is an array, or if digging should occur
+      if (Array.isArray(input)) {
+        // returns string of map results after all nested arrays have been resolved
+        return input.map(recursiveDigging).join('');
+      };
+      var tag = input.tag
+        , content = input.content;
+      if (typeof content === 'string') {
+        return '<' + tag + '>' + content + '</' + tag + '>';
+      } else {
+        return '<' + tag + '>' + recursiveDigging(content) + '</' + tag + '>';
+      }
+    };
+
   });
 
 }());
