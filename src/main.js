@@ -22,16 +22,17 @@
     })(file);
     // sets behavior (what the output format is) for reader.onload
     reader.readAsText(file);
-
-    // recursive helper function for digging deep takes parsed JSON data object ()
+    // recursive helper function for digging deep takes parsed JSON data object
     function recursiveDigging(input) {
       // checks if input is an array, or if digging should occur
       if (Array.isArray(input)) {
-        // returns string of map results after all nested arrays have been resolved
+        // returns string of map results(html elements) after all nested arrays have been resolved
         return input.map(recursiveDigging).join('');
       };
+      // assigns the keys to a variable when an object is reached
       var tag = input.tag
         , content = input.content;
+      // checks if content variable has further nested objects/arrays, maps over (recursive) if so  
       if (typeof content === 'string') {
         return '<' + tag + '>' + content + '</' + tag + '>';
       } else {
