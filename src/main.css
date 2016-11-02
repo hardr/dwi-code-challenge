@@ -1,0 +1,11 @@
+/* render area style */
+
+.renderArea {
+  display: inline-block;
+  height: 20%;
+  width: 100%;
+  background-color: grey;
+  padding: 30px;
+
+  border: 1px solid black;
+}
